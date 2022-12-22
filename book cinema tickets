@@ -1,0 +1,501 @@
+include emu8086.inc
+org  100h	
+.model large 
+.data   
+msg1 db  "       ******** Welcome to cinema Galaxy ********      $"    
+ ;movies types  
+tmsg db   10,13,"  *******  movies's type ******* $" 
+msg3 db     10,13, "               -----------------------------------------            $"
+comedy db 10,13 ,  "               |             1.comedy                 |             $"
+romance db 10,13 , "               |             2.Romance                |             $"
+horror db 10,13,   "               |             3.horror                 |             $"
+fantasy db 10,13,  "               |             4.fantasy                |             $"
+animation db 10,13,"               |             5.animation              |             $"  
+msg2 db  10,13,10,13,"Choose the type of movie :  $"
+;Comedy movies
+msg4 db 10,13, "These are Comedy movies that are available now  $"
+c1 db  10,13,  "               |             1.Onward                   |$"
+c2 db  10,13,  "               |             2.home alone               |$"
+c3 db  10,13,  "               |             3.holidays                 |$"
+c4 db  10,13,  "               |             4.Last Christmas           |$"
+c5 db  10,13,  "               |             5.pk                       |$" 
+;Romance movies
+msg5 db 10,13, "These are Romance movies that are available now  $"
+R1 db  10,13,  "               |             1.the notebook             |$"
+R2 db  10,13  ,"               |             2.me befor you             |$"
+R3 db  10,13,  "               |             3.five feet apart          |$"
+R4 db  10,13  ,"               |             4.titanic                  |$"
+R5 db  10,13,  "               |             5. The In Between          |$"   
+;horror movies
+msg6 db 10,13, "These are horror movies that are available now  $"
+H1 db  10,13,  "               |             1.the conjuring            |$"
+H2 db  10,13  ,"               |             2.Quit place               |$"
+H3 db  10,13,  "               |             3.the nun                  |$"
+H4 db  10,13  ,"               |             4.it                       |$"
+H5 db  10,13,  "               |             5. smile                   |$"    
+;fantasy movies 
+msg7 db 10,13, "These are  fantasy movies that are available now  $"
+F1 db  10,13,  "               |             1.doctor stringer          |$"
+F2 db  10,13  ,"               |             2.spiderman                |$"
+F3 db  10,13,  "               |             3.harry potter             |$"
+F4 db  10,13  ,"               |             4.twilight                 |$"
+F5 db  10,13,  "               |             5. thor                    |$"
+;animation movies 
+msg8 db 10,13, "These are animation movies that are available now  $"
+A1 db  10,13,  "               |             1.soul                     |$"
+A2 db  10,13  ,"               |             2.toy story                |$"
+A3 db  10,13,  "               |             3.inside out               |$"
+A4 db  10,13  ,"               |             4.turning red              |$"
+A5 db  10,13,  "               |             5. luck                    |$"
+msg9 db 10,13, " enter the movie that you want : $" 
+;place
+lmsg db 10,13,"         ******** locations ********      $"
+p1 db 10,13,   "               |             1.front                    |$"   
+p2 db 10,13,   "               |             2.center                   |$"
+p3 db 10,13,   "               |             3.back                     |$"
+msg10 db 10,13,"choose your site location: $" 
+;time
+msg17 db 10,13,"           ******** party's time ********               $"
+T1 db  10,13,  "               |        1.10:00 AM --->11:30 AM  #50    |$"
+T2 db  10,13  ,"               |        2.12:00 PM---> 1:30 PM   #50    |$"
+T3 db  10,13,  "               |        3.2:00 PM--->3:30 PM     #70    |$"
+T4 db  10,13  ,"               |        4.4:00 PM--->5:30 PM     #70    |$"
+T5 db  10,13,  "               |        5.6:00 PM--->7:30 PM     #85    |$"
+T6 db  10,13,  "               |        6.8:00 PM--->9:30 PM     #85    |$"   
+T7 db  10,13,  "               |        7.10:00 PM--->11:30 PM   #90    |$"  
+T8 db  10,13,  "               |        8.12:00 AM--->1:30 AM    #90    |$" 
+msg16 db 10,13,"choose party time:  $"   
+msg11 db 10,13,"your ticket price=50 EGP $"   
+msg12 db 10,13,"your ticket price=70 EGP $"  
+msg13 db 10,13,"your ticket price=85 EGP $"  
+msg14 db 10,13,"your ticket price=90 EGP $"  
+msg15 db 10,13 , " Wrong number ---> please enter number between 1to 5 $"    ;error1
+msg18 db 10,13 , " Wrong number ---> please enter number between 1to 8 $"    ;error3 
+msg19 db 10,13 , " Wrong number ---> please enter number between 1to 3 $"    ;error2  
+
+.code 
+main proc far 
+    .STARTUP 
+    lea dx,msg1    
+    mov ah,9
+    int 21h  
+     
+MainList:    
+    lea dx,tmsg
+    mov ah,9
+    int 21h 
+     
+    lea dx,msg3    ;----------------------
+    mov ah,9
+    int 21h 
+                    ;print list of  movies type      
+    lea dx,comedy
+    mov ah,9
+    int 21h   
+    
+    lea dx,Romance
+    mov ah,9
+    int 21h 
+    
+    lea dx,horror 
+    mov ah,9
+    int 21h  
+    
+    lea dx,fantasy
+    mov ah,9
+    int 21h 
+    
+    lea dx,animation
+    mov ah,9
+    int 21h 
+    
+    lea dx,msg3    ;----------------------
+    mov ah,9
+    int 21h  
+    
+    lea dx,msg2     ; "Choose the type of movie= "
+    mov ah,9
+    int 21h              
+                       
+    mov ah,1        ;accept movie type number
+    int 21h  
+    mov bl,al
+    sub bl,30h
+          
+    CMP bl,1           ;compare
+    JE L1 
+    CMP bl,2
+    JE L2 
+    CMP bl,3
+    JE L3 
+    CMP bl,4
+    JE L4   
+    CMP bl,5
+    JE L5 
+    jg error
+           
+L1 :  ;comdy movies name
+   lea dx,msg4      
+    mov ah,9
+    int 21h 
+      
+    lea dx,msg3       ;----------------------
+    mov ah,9         
+    int 21h   
+                ;print list of comdy movies names
+   lea dx,c1
+   mov ah,9
+   int 21h 
+   
+   lea dx,c2
+   mov ah,9
+   int 21h  
+   
+   lea dx,c3
+   mov ah,9
+   int 21h   
+   
+   lea dx,c4
+   mov ah,9
+   int 21h
+   
+   lea dx,c5
+   mov ah,9           
+   int 21h  
+   
+    lea dx,msg3     ;----------------------
+    mov ah,9
+    int 21h  
+      
+    lea dx,msg9       ;" enter the  comdy movie that you want :
+    mov ah,9
+    int 21h  
+       
+    mov ah,1           ;accept number of  movie name 
+    int 21h   
+    mov bl,al
+    sub bl,30h 
+      
+   jmp stop
+L2:  ;romance movies name 
+   lea dx,msg5             ; "avaliable romance movies"
+   mov ah,9
+   int 21h 
+    
+   lea dx,msg3              ;----------------------
+   mov ah,9
+   int 21h 
+                  ;print list of romance movies names
+   lea dx,R1
+   mov ah,9
+   int 21h 
+   
+   lea dx,R2
+   mov ah,9
+   int 21h  
+   
+   lea dx,R3
+   mov ah,9
+   int 21h   
+   
+   lea dx,R4
+   mov ah,9
+   int 21h
+   
+   lea dx,R5
+   mov ah,9
+   int 21h
+   
+    lea dx,msg3       ;----------------------
+    mov ah,9
+    int 21h 
+                     
+    lea dx,msg9       ;" enter the  romance  movie that you want :
+    mov ah,9
+    int 21h  
+        
+    mov ah,1          ;accept number of  movie name 
+    int 21h  
+    mov bl,al
+    sub bl,30h
+  
+   jmp stop
+ L3:  ;horror movies name
+   lea dx,msg6                 ; "avaliable horror movies"
+   mov ah,9
+   int 21h 
+ 
+   lea dx,msg3               ;----------------------
+   mov ah,9
+   int 21h
+                    ;print list of horror movies names
+   lea dx,H1
+   mov ah,9
+   int 21h 
+   
+   lea dx,H2
+   mov ah,9
+   int 21h  
+   
+   lea dx,H3
+   mov ah,9
+   int 21h   
+   
+   lea dx,H4
+   mov ah,9
+   int 21h
+   
+   lea dx,H5
+   mov ah,9
+   int 21h
+   
+   lea dx,msg3            ;----------------------
+   mov ah,9
+   int 21h  
+    
+    lea dx,msg9       ;" enter the  horror  movie that you want :
+    mov ah,9
+    int 21h  
+        
+    mov ah,1         ;accept number of  movie name 
+    int 21h  
+    mov bl,al
+    sub bl,30h
+    
+   jmp stop 
+L4: ; fantacy movies name
+    lea dx,msg7              ; "avaliable fantacy movies"
+    mov ah,9
+    int 21h 
+
+   lea dx,msg3             ;----------------------
+   mov ah,9
+   int 21h             
+       ;print list of  fantacy movies names
+   lea dx,F1
+   mov ah,9
+   int 21h 
+   
+   lea dx,F2
+   mov ah,9
+   int 21h  
+   
+   lea dx,F3
+   mov ah,9
+   int 21h   
+   
+   lea dx,F4
+   mov ah,9
+   int 21h
+   
+   lea dx,F5
+   mov ah,9
+   int 21h
+   
+   lea dx,msg3              ;----------------------
+   mov ah,9
+   int 21h 
+    
+    lea dx,msg9           ;" enter the  horror  movie that you want :
+    mov ah,9
+    int 21h  
+        
+    mov ah,1      ;accept number of  movie name 
+    int 21h  
+    mov bl,al
+    sub bl,30h  
+        
+   jmp stop
+L5:  ;animation  movies name
+    lea dx,msg8          ; "avaliable animation  movies"
+    mov ah,9
+    int 21h
+     
+   lea dx,msg3            ;----------------------
+   mov ah,9
+   int 21h 
+            ;print list of animation movies names
+   lea dx,A1
+   mov ah,9
+   int 21h 
+   
+   lea dx,A2
+   mov ah,9
+   int 21h  
+   
+   lea dx,A3
+   mov ah,9
+   int 21h   
+   
+   lea dx,A4
+   mov ah,9
+   int 21h
+   
+   lea dx,A5
+   mov ah,9
+   int 21h
+   
+   lea dx,msg3              ;----------------------
+   mov ah,9
+   int 21h 
+      
+    lea dx,msg9        ;" enter the animation  movie that you want : "
+    mov ah,9
+    int 21h  
+        
+    mov ah,1        ;accept number of  movie name 
+    int 21h  
+    mov bl,al
+    sub bl,30h    
+   
+   jmp stop  
+stop:
+        
+LOCATION:   
+    lea dx,lmsg
+    mov ah,9
+    int 21h   
+    
+   lea dx,msg3               ;----------------------
+   mov ah,9
+   int 21h         
+                         ;front         
+    lea dx,p1
+    mov ah,9      
+    int 21h 
+                         ;Center:
+   lea dx,p2       
+    mov ah,9
+    int 21h 
+                          ;back:
+   lea dx,p3       
+    mov ah,9
+    int 21h  
+    
+   lea dx,msg3                ;;----------------------
+   mov ah,9
+   int 21h 
+    
+    lea dx,msg10         ;"choose your site location: $"
+    mov ah,9
+    int 21h    
+    
+    mov ah,1        ;accept movie type number
+    int 21h  
+    mov bl,al
+    sub bl,30h 
+    
+    CMP bl,3 
+    jg error2
+         
+ TIME: 
+   lea dx,msg17
+   mov ah,9
+   int 21h  
+    
+   lea dx,msg3 ;----------------------
+   mov ah,9
+   int 21h 
+   
+   lea dx,T1
+   mov ah,9
+   int 21h  
+   
+   lea dx,T2
+   mov ah,9
+   int 21h   
+   
+   lea dx,T3
+   mov ah,9
+   int 21h
+   
+   lea dx,T4
+   mov ah,9           
+   int 21h 
+   
+    lea dx,T5
+   mov ah,9           
+   int 21h
+   
+    lea dx,T6
+   mov ah,9           
+   int 21h    
+   
+    lea dx,T7
+   mov ah,9           
+   int 21h    
+   
+    lea dx,T8
+   mov ah,9           
+   int 21h    
+   
+   lea dx,msg3   ;----------------------
+   mov ah,9           
+   int 21h 
+   
+   lea dx,msg16
+   mov ah,9           
+   int 21h  
+   
+    mov ah,1        ;accept movie type number
+    int 21h  
+    mov bl,al
+    sub bl,30h 
+    
+    CMP bl,1           ;compare
+    JE party1 
+    CMP bl,2
+    JE party1 
+    CMP bl,3
+    JE party2 
+    CMP bl,4
+    JE party2  
+    CMP bl,5
+    JE party3
+    CMP bl,6
+    JE party3  
+    CMP bl,7
+    JE party4
+    CMP bl,8
+    JE party4 
+    jmp error3
+party1:
+  lea dx,msg11
+   mov ah,9           
+   int 21h 
+   jmp bye    
+party2: 
+    lea dx,msg12
+   mov ah,9           
+   int 21h 
+   jmp bye 
+party3: 
+   lea dx,msg13
+   mov ah,9           
+   int 21h  
+   jmp bye
+party4:
+   lea dx,msg14
+   mov ah,9           
+   int 21h  
+   jmp bye
+ bye:
+ jmp finish   
+ error:
+  lea dx,msg15        
+  mov ah,9
+  int 21h 
+  jmp MainList
+  error2:
+  lea dx,msg19        
+  mov ah,9
+  int 21h 
+  jmp LOCATION      
+ error3:
+  lea dx,msg18        
+  mov ah,9
+  int 21h 
+  jmp  TIME            
+finish: 
+.exit
+main endp 
